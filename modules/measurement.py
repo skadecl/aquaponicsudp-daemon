@@ -48,7 +48,7 @@ class MeasurementLoad:
             return False
 
     def addError(self, error):
-        if isinstance(sample, MeasurementError):
+        if isinstance(error, MeasurementError):
             self.errors.append(error)
             return True
         else:
