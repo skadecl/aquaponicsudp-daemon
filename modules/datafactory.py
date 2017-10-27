@@ -4,6 +4,7 @@
 import sys
 from logger import AQLog
 from measurement import Measurement
+from measurement import MeasurementError
 from measurement import MeasurementLoad
 
 #DataFactory
