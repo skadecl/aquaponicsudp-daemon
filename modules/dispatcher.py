@@ -67,13 +67,13 @@ class Dispatcher:
         newQueue = []
         for load in self.queue:
             if len(load.measurements) == 0 and len(load.errors) == 0:
-                continue
                 if self.verbose:
                     AQLog("INFO", "Discarded empty MeasurementLoad")
-            elif load.attempts >= self.maxAttempts:
                 continue
+            elif load.attempts >= self.maxAttempts:
                 if self.verbose:
                     AQLog("INFO", "Discarded MeasurementLoad", "Too many attempts")
+                continue
             else:
                 try:
                     r = requests.post(self.apiUrl + 'push', data=load.toJSON())
