@@ -51,7 +51,7 @@ def daemonLoop():
         data = dataFactory.getData()
         dispatcher.addSet(data)
         if dispatcher.hasActions:
-            actuatorHandler.addActions(dispatcher.actions)
+            actuatorHandler.addActions(dispatcher.getActions)
             dispatcher.updateActions(actuatorHandler.toUpdate)
         time.sleep(measureFrequency)
 

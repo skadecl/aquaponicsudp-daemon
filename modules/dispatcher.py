@@ -57,6 +57,11 @@ class Dispatcher:
     def hasActions(self):
         return len(self.actions) > 0
 
+    def getActions(self):
+        aux = self.actions
+        self.actions = []
+        return aux
+
     def dispatch(self):
         if len(self.queue) == 0:
             if self.verbose:
