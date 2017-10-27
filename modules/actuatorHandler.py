@@ -50,3 +50,8 @@ class ActuatorHandler:
 
     def hasUpdates(self):
         return len(self.toUpdate) > 0
+
+    def getUpdates(self):
+        aux = self.toUpdate
+        self.toUpdate = []
+        return aux
