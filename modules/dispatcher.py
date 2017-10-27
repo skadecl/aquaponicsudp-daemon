@@ -3,8 +3,10 @@
 
 import requests
 import datetime
+import json
 from measurement import Measurement
 from measurement import MeasurementLoad
+from actionParser import parseActionsFromJSON
 from logger import AQLog
 
 class Dispatcher:
@@ -13,6 +15,7 @@ class Dispatcher:
     verbose = None
     logErrors = None
     maxAttempts = None
+    actions = None
 
     def __init__(self, pApiUrl, pVerbose, pLogErrors, pMaxAttempts):
         self.queue = []
@@ -20,6 +23,7 @@ class Dispatcher:
         self.verbose = pVerbose
         self.logErrors = pLogErrors
         self.maxAttempts = pMaxAttempts
+        self.actions = []
 
         if self.verbose:
             AQLog("INFO", "Dispatcher init OK")
@@ -35,6 +39,24 @@ class Dispatcher:
 
         self.dispatch()
 
+    def updateActions(self, actions):
+        try:
+            r = requests.post(self.apiUrl + 'actions', json=actions)
+            if self.verbose:
+                AQLog("INFO", "Trying to update actions status")
+            if r.status_code == 200:
+                if self.verbose:
+                    AQLog("INFO", str(len(actions)) + " actions updated")
+            else:
+                if self.logErrors:
+                    AQLog("ERROR", "Actions update could not be sent", "HTTP " + r.status_code)
+        except Exception as e:
+            if self.logErrors:
+                AQLog("ERROR", "Actions update could not be sent", "Network Error")
+
+    def hasActions(self):
+        return len(self.actions) > 0
+
     def dispatch(self):
         if len(self.queue) == 0:
             if self.verbose:
@@ -42,27 +64,34 @@ class Dispatcher:
             return
 
         #Dispatching process
+        newQueue = []
         for load in self.queue:
             if len(load.measurements) == 0 and len(load.errors) == 0:
-                self.queue.remove(load)
+                continue
                 if self.verbose:
                     AQLog("INFO", "Discarded empty MeasurementLoad")
             elif load.attempts >= self.maxAttempts:
-                self.queue.remove(load)
+                continue
                 if self.verbose:
                     AQLog("INFO", "Discarded MeasurementLoad", "Too many attempts")
             else:
                 try:
-                    r = requests.post(self.apiUrl, data=load.toJSON())
-                    if r.status_code == 201:
-                        self.queue.remove(load)
+                    r = requests.post(self.apiUrl + 'push', data=load.toJSON())
+                    if self.verbose:
+                        AQLog("INFO", "Trying to send load")
+                    if r.status_code == 201 or r.status_code == 210:
                         if self.verbose:
-                            AQLog("INFO", "MeasurementLoad sent")
+                            AQLog("INFO", "MeasurementLoad sent OK")
+                        if r.status_code == 210:
+                            self.actions += parseActionsFromJSON(r.content)
                     else:
                         load.attempts += 1
+                        newQueue.append(load)
                         if self.logErrors:
                             AQLog("ERROR", "MeasurementLoad could not be sent", "HTTP " + r.status_code)
                 except Exception as e:
                     load.attempts += 1
+                    newQueue.append(load)
                     if self.logErrors:
                         AQLog("ERROR", "Load could not be sent", "Network Error")
+        self.queue = newQueue

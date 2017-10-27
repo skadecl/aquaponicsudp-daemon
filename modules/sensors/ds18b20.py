@@ -26,6 +26,7 @@ class DS18B20Sensor:
             self.deviceFile = False
 
     def readRawTemp(self):
+        self.getDeviceFile()
         if self.deviceFile:
             try:
                 f = open(self.deviceFile, 'r')

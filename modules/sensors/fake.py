@@ -9,11 +9,15 @@ class FakeSensor:
     minValue = None
     maxValue = None
 
-    def __init__(self, pId, pName, pMinValue, pMaxValue):
+    def __init__(self, pId, pName, pMinValue, pMaxValue, pWithError = False):
         self.id = pId
         self.name = pName
         self.minValue = pMinValue
         self.maxValue = pMaxValue
+        self.withError = pWithError
 
     def read(self):
-        return round(random.uniform(self.minValue, self.maxValue), 2)
+        if self.withError:
+            return False
+        else:
+            return round(random.uniform(self.minValue, self.maxValue), 2)
