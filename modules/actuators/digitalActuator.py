@@ -14,6 +14,7 @@ class DigitalActuator:
         self.name = pName
         self.pin = pPin
         self.status = pStatus
+        gpio.setwarnings(False)
         gpio.setmode(gpio.BCM)
         gpio.setup(self.pin, gpio.OUT)
         self.setStatus(self.status)
