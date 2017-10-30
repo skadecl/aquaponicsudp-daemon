@@ -57,5 +57,6 @@ class MeasurementLoad:
     def toJSON(self):
         dataJson = json.dumps([ob.__dict__ for ob in self.measurements])
         errorsJson = json.dumps([ob.__dict__ for ob in self.errors])
-        template = '{"measurements": %s, "errors": %s}' % (dataJson, errorsJson)
+        isFresh = ('true' if self.attempts == 0 else 'false')
+        template = '{"measurements": %s, "errors": %s, "fresh": %s}' % (dataJson, errorsJson, isFresh)
         return template

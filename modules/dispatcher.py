@@ -12,14 +12,16 @@ from logger import AQLog
 class Dispatcher:
     queue = None
     apiUrl = None
+    requestTimeout = None
     verbose = None
     logErrors = None
     maxAttempts = None
     actions = None
 
-    def __init__(self, pApiUrl, pVerbose, pLogErrors, pMaxAttempts):
+    def __init__(self, pApiUrl, pTimeout, pVerbose, pLogErrors, pMaxAttempts):
         self.queue = []
         self.apiUrl = pApiUrl
+        self.requestTimeout = pTimeout
         self.verbose = pVerbose
         self.logErrors = pLogErrors
         self.maxAttempts = pMaxAttempts
@@ -39,9 +41,11 @@ class Dispatcher:
 
         self.dispatch()
 
-    def updateActions(self, actions):
+    def confirmActions(self, actions):
+        if len(actions) == 0:
+            return
         try:
-            r = requests.post(self.apiUrl + 'actions', json=actions)
+            r = requests.post(self.apiUrl + 'confirm', timeout=self.requestTimeout, json=actions)
             if self.verbose:
                 AQLog("INFO", "Trying to update actions status")
             if r.status_code == 200:
@@ -62,6 +66,23 @@ class Dispatcher:
         self.actions = []
         return aux
 
+    def sendHeartbeat(self, actuators):
+        try:
+            r = requests.post(self.apiUrl + 'heartbeat', timeout=self.requestTimeout, data=actuators)
+            if self.verbose:
+                AQLog("INFO", "Trying to send heartbeat")
+            if r.status_code == 200 or r.status_code == 210:
+                if self.verbose:
+                    AQLog("INFO", "Heartbeat sent OK")
+                if r.status_code == 210:
+                    self.actions += parseActionsFromJSON(r.content)
+            else:
+                if self.logErrors:
+                    AQLog("ERROR", "Actions update could not be sent", "HTTP " + r.status_code)
+        except Exception as e:
+            if self.logErrors:
+                AQLog("ERROR", "Heartbeat could not be sent", "Network Error")
+
     def dispatch(self):
         if len(self.queue) == 0:
             if self.verbose:
@@ -81,7 +102,7 @@ class Dispatcher:
                 continue
             else:
                 try:
-                    r = requests.post(self.apiUrl + 'push', data=load.toJSON())
+                    r = requests.post(self.apiUrl + 'push', timeout=self.requestTimeout, data=load.toJSON())
                     if self.verbose:
                         AQLog("INFO", "Trying to send load")
                     if r.status_code == 201 or r.status_code == 210:

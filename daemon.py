@@ -18,42 +18,50 @@ print "####      Roberto Roman       ####"
 verbose = True #Prints messages (INFO)
 logErrors = True #Prints errors
 apiUrl = 'http://localhost:1337/spu/' #API URL to make POST requests
+requestTimeout = 10
 maxDispatchAttempts = 10
-measureFrequency = 3 #Measure freq in seconds
+measureFrequency = 10 #Measure freq in seconds
+heartbeatFrequency = 3 #Heartbeat freq in seconds
 
 #MainLoop
 def daemonLoop():
-    #Create Dispatcher and DataFactory
-    dispatcher = Dispatcher(apiUrl, verbose, logErrors, maxDispatchAttempts)
+    #Init Handlers
+    dispatcher = Dispatcher(apiUrl, requestTimeout, verbose, logErrors, maxDispatchAttempts)
     dataFactory = DataFactory(verbose, logErrors)
     actuatorHandler = ActuatorHandler(verbose, logErrors)
 
-    #Create Sensors
-    # fakeTempSensor = FakeSensor(1, "Fake temperature sensor", 25, 27)
-    fakeLuxSensor = FakeSensor(2, "Fake lux sensor", 400, 650)
-    fakeHumSensor = FakeSensor(3, "Fake humidity sensor", 55, 57)
-    # dht22Sensor = DHT22Sensor(4, "DHT22 Temperature", "temperature", 22)
-    # ds18b20Sensor = DS18B20Sensor(5, "DS18B20 Temperature", 15)
+    #Init Sensors
+    # dataFactory.subscribe( FakeSensor(1, "Fake temperature sensor", 25, 27) )
+    dataFactory.subscribe( FakeSensor(2, "Fake lux sensor", 400, 650) )
+    dataFactory.subscribe( FakeSensor(3, "Fake humidity sensor", 55, 57) )
+    # dataFactory.subscribe( DHT22Sensor(4, "DHT22 Temperature", "temperature", 22) )
+    # dataFactory.subscribe( DS18B20Sensor(5, "DS18B20 Temperature", 15) )
 
-    #Actuators
-    #actuatorHandler.subscribe( FakeActuator(1, "Fake relay 1", False) )
-    #actuatorHandler.subscribe( FakeActuator(2, "Fake relay 2", False) )
+    #Init Actuators
+    actuatorHandler.subscribe( FakeActuator(1, "Fake relay 1", False) )
+    actuatorHandler.subscribe( FakeActuator(2, "Fake relay 2", False) )
 
-    #Subscribe sensors to DataFactory
-    # dataFactory.subscribe(fakeTempSensor)
-    #dataFactory.subscribe(fakeLuxSensor)
-    #dataFactory.subscribe(fakeHumSensor)
-    # dataFactory.subscribe(dht22Sensor)
-    # dataFactory.subscribe(ds18b20Sensor)
+
+    #Control time
+    lastDispatch = 0
 
     #Actual Loop
     while True:
-        data = dataFactory.getData()
-        dispatcher.addSet(data)
-        if dispatcher.hasActions:
-            actuatorHandler.addActions(dispatcher.getActions)
-            dispatcher.updateActions(actuatorHandler.toUpdate)
-        time.sleep(measureFrequency)
+        #Heartbeat
+        dispatcher.sendHeartbeat(actuatorHandler.getActuatorsJSON())
+        dispatcher.confirmActions(actuatorHandler.getUpdates())
+
+
+        #Dispatch data (Measure)
+        now = time.time()
+        if (now - lastDispatch) > measureFrequency:
+            dispatcher.addSet(dataFactory.getData())
+            actuatorHandler.addActions(dispatcher.getActions())
+            dispatcher.confirmActions(actuatorHandler.getUpdates())
+            lastDispatch = time.time()
+
+        #Sleep until next heartbeat
+        time.sleep(heartbeatFrequency)
 
 #Main Sentinel
 if __name__ == "__main__":
