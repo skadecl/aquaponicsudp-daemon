@@ -12,15 +12,17 @@ from logger import AQLog
 class Dispatcher:
     queue = None
     apiUrl = None
+    spuToken = None
     requestTimeout = None
     verbose = None
     logErrors = None
     maxAttempts = None
     actions = None
 
-    def __init__(self, pApiUrl, pTimeout, pVerbose, pLogErrors, pMaxAttempts):
+    def __init__(self, pApiUrl, pToken, pTimeout, pVerbose, pLogErrors, pMaxAttempts):
         self.queue = []
         self.apiUrl = pApiUrl
+        self.spuToken = {'authorization': pToken}
         self.requestTimeout = pTimeout
         self.verbose = pVerbose
         self.logErrors = pLogErrors
@@ -45,7 +47,7 @@ class Dispatcher:
         if len(actions) == 0:
             return
         try:
-            r = requests.post(self.apiUrl + 'confirm', timeout=self.requestTimeout, json=actions)
+            r = requests.post(self.apiUrl + 'confirm', headers=self.spuToken, timeout=self.requestTimeout, json=actions)
             if self.verbose:
                 AQLog("INFO", "Trying to update actions status")
             if r.status_code == 200:
@@ -68,7 +70,7 @@ class Dispatcher:
 
     def sendHeartbeat(self, actuators):
         try:
-            r = requests.post(self.apiUrl + 'heartbeat', timeout=self.requestTimeout, data=actuators)
+            r = requests.post(self.apiUrl + 'heartbeat', headers=self.spuToken, timeout=self.requestTimeout, data=actuators)
             if self.verbose:
                 AQLog("INFO", "Trying to send heartbeat")
             if r.status_code == 200 or r.status_code == 210:
@@ -102,7 +104,7 @@ class Dispatcher:
                 continue
             else:
                 try:
-                    r = requests.post(self.apiUrl + 'push', timeout=self.requestTimeout, data=load.toJSON())
+                    r = requests.post(self.apiUrl + 'push', headers=self.spuToken, timeout=self.requestTimeout, data=load.toJSON())
                     if self.verbose:
                         AQLog("INFO", "Trying to send load")
                     if r.status_code == 201 or r.status_code == 210:

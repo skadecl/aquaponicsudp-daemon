@@ -40,7 +40,7 @@ class DataFactory:
         for sensor in self.sensors:
             AQLog("INFO", "Trying to read", sensor.name)
             thisSample = sensor.read()
-            if thisSample != False or thisSample == 0.0:
+            if thisSample != False:
                 thisMeasurement = Measurement(sensor.id, thisSample)
                 if thisLoad.addSample(thisMeasurement):
                     if self.verbose:
