@@ -17,12 +17,14 @@ class Measurement:
 
 # MeasurementError Class
 class MeasurementError:
-    sensor = None
+    device = None
+    type = None
     message = None
     sampledate = None
 
-    def __init__(self, pSensor, pMessage):
-        self.sensor = pSensor
+    def __init__(self, pDevice, pType, pMessage):
+        self.device = pDevice
+        self.type = pType
         self.message = pMessage
         self.sampledate = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

@@ -51,8 +51,8 @@ class DataFactory:
                         if self.logErrors:
                             AQLog("ERROR", errorMsg, sensor.name)
             else:
-                errorMsg = "Could not get data from sensor"
-                thisLoad.addError(MeasurementError(sensor.id, errorMsg))
+                errorMsg = "No se pudo leer el sensor"
+                thisLoad.addError(MeasurementError(sensor.id, 1, errorMsg))
                 if self.logErrors:
                     AQLog("ERROR", errorMsg, sensor.name)
         return thisLoad
