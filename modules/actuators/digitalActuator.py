@@ -8,6 +8,7 @@ class DigitalActuator:
     name = None
     pin = None
     status = None
+    reverse = None
 
     def __init__(self, pId, pName, pPin, pStatus = False):
         self.id = pId

@@ -6,6 +6,7 @@ from modules.actuatorHandler import ActuatorHandler
 from modules.sensors.analog import AnalogSensor
 from modules.sensors.dht22 import DHT22Sensor
 from modules.sensors.ds18b20 import DS18B20Sensor
+from modules.sensors.switch import SwitchSensor
 from modules.sensors.fake import FakeSensor
 
 from modules.actuators.fakeActuator import FakeActuator
@@ -18,8 +19,8 @@ print "####      Roberto Roman       ####"
 #CONFIG
 verbose = True #Prints messages (INFO)
 logErrors = True #Prints errors
-apiUrl = 'http://192.168.0.10:1337/spu/' #API URL to make POST requests
-spuToken = 'Replace this with your own token' #Invalid tokens will cause 403HTTP Error
+apiUrl = 'http://192.168.0.6:1337/api/spu/' #API URL to make POST requests
+spuToken = 'f9907db9ee752a989e850cb735b48bedcd4dd6333bc978e1503b9430b40cece4' #Invalid tokens will cause 403HTTP Error
 requestTimeout = 10
 maxDispatchAttempts = 10
 measureFrequency = 10 #Measure freq in seconds
@@ -33,18 +34,18 @@ def daemonLoop():
     actuatorHandler = ActuatorHandler(verbose, logErrors)
 
     #Init Sensors
-    # dataFactory.subscribe( FakeSensor(1, "Fake temperature sensor", 25, 27) )
-    # dataFactory.subscribe( FakeSensor(2, "Fake lux sensor", 400, 650) )
-    # dataFactory.subscribe( FakeSensor(3, "Fake humidity sensor", 55, 57) )
-    dataFactory.subscribe( DHT22Sensor(1, "DHT22 Temperature", "temperature", 22) )
+    dataFactory.subscribe( DHT22Sensor(1, "DHT22 Temperature", "temperature", 21) )
     dataFactory.subscribe( DS18B20Sensor(2, "DS18B20 Temperature", 15) )
-    dataFactory.subscribe( AnalogSensor(3, "Potentiometer 1", 1, 1, 1) )
-    dataFactory.subscribe( AnalogSensor(4, "UV Sensor", 2, 1, 0.00496) )
-    dataFactory.subscribe( DHT22Sensor(5, "DHT22 Humidity", "humidity", 22) )
+    dataFactory.subscribe( DHT22Sensor(3, "DHT22 Humidity", "humidity", 21) )
+    dataFactory.subscribe( AnalogSensor(4, "pH Sensor", 0, 1, 3.5) )
+    dataFactory.subscribe( AnalogSensor(5, "UV Sensor", 1, 1, 1.535) )
+    dataFactory.subscribe( AnalogSensor(6, "Illumination", 1, 1, 307) )
+    dataFactory.subscribe( SwitchSensor(7, "Fishtank Level", 13) )
+    dataFactory.subscribe( SwitchSensor(8, "Tank Level", 20) )
 
     #Init Actuators
     actuatorHandler.subscribe( DigitalActuator(1, "Relay slot 1", 16, False) )
-    actuatorHandler.subscribe( FakeActuator(2, "Fake relay 2", False) )
+    actuatorHandler.subscribe( DigitalActuator(2, "Relay slot 2", 26, False) )
 
 
     #Control time
@@ -54,6 +55,7 @@ def daemonLoop():
     while True:
         #Heartbeat
         dispatcher.sendHeartbeat(actuatorHandler.getActuatorsJSON())
+        actuatorHandler.addActions(dispatcher.getActions())
         dispatcher.confirmActions(actuatorHandler.getUpdates())
 
 

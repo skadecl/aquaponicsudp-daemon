@@ -26,4 +26,4 @@ class DHT22Sensor:
             if self.type == 'humidity':
                 return round(humidity, 2)
         else:
-            return False
+            return "read_error"

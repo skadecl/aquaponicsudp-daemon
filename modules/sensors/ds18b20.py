@@ -50,11 +50,11 @@ class DS18B20Sensor:
             attempts += 1
             time.sleep(2)
         if attempts >= self.maxAttempts:
-            return False
+            return "read_error"
         equals_pos = lines[1].find('t=')
         if equals_pos != -1:
             temp_string = lines[1][equals_pos+2:]
             temp = float(temp_string) / 1000.0
             return round(temp, 2)
         else:
-            return False
+            return "read_error"

@@ -26,9 +26,8 @@ class AnalogSensor:
 
     def read(self):
         try:
-            value = round(float(self.mcp.read_adc(self.channel)) * float(self.convertion), 2)
-            if value == 0.0:
-                value = 0.1
+            value = (float(self.mcp.read_adc(self.channel)) / 1024.0) * 5.0
+            value = round(value * float(self.convertion), 2)
             return value
         except Exception as e:
-            return False
+            return "read_error"

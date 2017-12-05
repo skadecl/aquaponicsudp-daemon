@@ -1,0 +1,67 @@
+#### AquaponicsUDP Daemon RPi ####
+####      Roberto Roman       ####
+[INFO | 2017-12-04 23:11:51] Dispatcher init OK 
+[INFO | 2017-12-04 23:11:51] DataFactory init OK 
+[INFO | 2017-12-04 23:11:51] Sensor added to DataFactory (DHT22 Temperature)
+[INFO | 2017-12-04 23:11:51] Sensor added to DataFactory (DS18B20 Temperature)
+[INFO | 2017-12-04 23:11:51] Sensor added to DataFactory (pH Sensor)
+[INFO | 2017-12-04 23:11:51] Sensor added to DataFactory (UV Sensor)
+[INFO | 2017-12-04 23:11:51] Sensor added to DataFactory (DHT22 Humidity)
+[INFO | 2017-12-04 23:11:51] Actuator added to Handler (Relay slot 1)
+[INFO | 2017-12-04 23:11:51] Actuator added to Handler (Relay slot 2)
+[INFO | 2017-12-04 23:11:51] Trying to send heartbeat 
+[INFO | 2017-12-04 23:11:51] Heartbeat sent OK 
+[INFO | 2017-12-04 23:11:51] Actuator status changed to 1 (Relay slot 1)
+[INFO | 2017-12-04 23:11:51] Trying to update actions status 
+[INFO | 2017-12-04 23:11:51] 1 actions updated 
+[INFO | 2017-12-04 23:11:51] Trying to read (DHT22 Temperature)
+[INFO | 2017-12-04 23:11:52] Sample added to MeasurementLoad (DHT22 Temperature)
+[INFO | 2017-12-04 23:11:52] Trying to read (DS18B20 Temperature)
+[INFO | 2017-12-04 23:11:53] Sample added to MeasurementLoad (DS18B20 Temperature)
+[INFO | 2017-12-04 23:11:53] Trying to read (pH Sensor)
+[INFO | 2017-12-04 23:11:53] Sample added to MeasurementLoad (pH Sensor)
+[INFO | 2017-12-04 23:11:53] Trying to read (UV Sensor)
+[INFO | 2017-12-04 23:11:53] Sample added to MeasurementLoad (UV Sensor)
+[INFO | 2017-12-04 23:11:53] Trying to read (DHT22 Humidity)
+[INFO | 2017-12-04 23:11:53] Sample added to MeasurementLoad (DHT22 Humidity)
+[INFO | 2017-12-04 23:11:53] MeasurementLoad added to dispatcher 
+[INFO | 2017-12-04 23:11:53] Trying to send load 
+[INFO | 2017-12-04 23:11:53] MeasurementLoad sent OK 
+[INFO | 2017-12-04 23:11:56] Trying to send heartbeat 
+[INFO | 2017-12-04 23:11:56] Heartbeat sent OK 
+[INFO | 2017-12-04 23:11:59] Trying to send heartbeat 
+[INFO | 2017-12-04 23:11:59] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:02] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:02] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:05] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:05] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:05] Trying to read (DHT22 Temperature)
+[INFO | 2017-12-04 23:12:06] Sample added to MeasurementLoad (DHT22 Temperature)
+[INFO | 2017-12-04 23:12:06] Trying to read (DS18B20 Temperature)
+[INFO | 2017-12-04 23:12:07] Sample added to MeasurementLoad (DS18B20 Temperature)
+[INFO | 2017-12-04 23:12:07] Trying to read (pH Sensor)
+[INFO | 2017-12-04 23:12:07] Sample added to MeasurementLoad (pH Sensor)
+[INFO | 2017-12-04 23:12:07] Trying to read (UV Sensor)
+[INFO | 2017-12-04 23:12:07] Sample added to MeasurementLoad (UV Sensor)
+[INFO | 2017-12-04 23:12:07] Trying to read (DHT22 Humidity)
+[INFO | 2017-12-04 23:12:10] Sample added to MeasurementLoad (DHT22 Humidity)
+[INFO | 2017-12-04 23:12:10] MeasurementLoad added to dispatcher 
+[INFO | 2017-12-04 23:12:10] Trying to send load 
+[INFO | 2017-12-04 23:12:10] MeasurementLoad sent OK 
+[INFO | 2017-12-04 23:12:13] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:13] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:16] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:16] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:19] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:19] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:22] Trying to send heartbeat 
+[INFO | 2017-12-04 23:12:22] Heartbeat sent OK 
+[INFO | 2017-12-04 23:12:22] Trying to read (DHT22 Temperature)
+[INFO | 2017-12-04 23:12:25] Sample added to MeasurementLoad (DHT22 Temperature)
+[INFO | 2017-12-04 23:12:25] Trying to read (DS18B20 Temperature)
+[INFO | 2017-12-04 23:12:26] Sample added to MeasurementLoad (DS18B20 Temperature)
+[INFO | 2017-12-04 23:12:26] Trying to read (pH Sensor)
+[INFO | 2017-12-04 23:12:26] Sample added to MeasurementLoad (pH Sensor)
+[INFO | 2017-12-04 23:12:26] Trying to read (UV Sensor)
+[INFO | 2017-12-04 23:12:26] Sample added to MeasurementLoad (UV Sensor)
+[INFO | 2017-12-04 23:12:26] Trying
