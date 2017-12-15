@@ -38,18 +38,19 @@ class DataFactory:
     def getData(self):
         thisLoad = MeasurementLoad()
         for sensor in self.sensors:
-            AQLog("INFO", "Trying to read", sensor.name)
+            if self.verbose:
+                AQLog("INFO", "Trying to read", sensor.name)
             thisSample = sensor.read()
             if thisSample != "read_error":
                 thisMeasurement = Measurement(sensor.id, thisSample)
                 if thisLoad.addSample(thisMeasurement):
                     if self.verbose:
                         AQLog("INFO", "Sample added to MeasurementLoad", sensor.name)
-                    else:
-                        errorMsg = "Error adding sample to MeasurementLoad"
-                        thisLoad.addError(MeasurementError(sensor.id, errorMsg))
-                        if self.logErrors:
-                            AQLog("ERROR", errorMsg, sensor.name)
+                else:
+                    errorMsg = "Error adding sample to MeasurementLoad"
+                    thisLoad.addError(MeasurementError(sensor.id, errorMsg))
+                    if self.logErrors:
+                        AQLog("ERROR", errorMsg, sensor.name)
             else:
                 errorMsg = "No se pudo leer el sensor"
                 thisLoad.addError(MeasurementError(sensor.id, 1, errorMsg))

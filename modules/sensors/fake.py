@@ -18,6 +18,6 @@ class FakeSensor:
 
     def read(self):
         if self.withError:
-            return False
+            return "read_error"
         else:
             return round(random.uniform(self.minValue, self.maxValue), 2)
