@@ -19,12 +19,12 @@ print "####      Roberto Roman       ####"
 #CONFIG
 verbose = True #Prints messages (INFO)
 logErrors = True #Prints errors
-apiUrl = 'http://192.168.0.6:1337/api/spu/' #API URL to make POST requests
+apiUrl = 'http://acuaiot.com/api/spu/' #API URL to make POST requests
 spuToken = 'f9907db9ee752a989e850cb735b48bedcd4dd6333bc978e1503b9430b40cece4' #Invalid tokens will cause 403HTTP Error
 requestTimeout = 10
 maxDispatchAttempts = 10
-measureFrequency = 10 #Measure freq in seconds
-heartbeatFrequency = 3 #Heartbeat freq in seconds
+measureFrequency = 300 #Measure freq in seconds
+heartbeatFrequency = 30 #Heartbeat freq in seconds
 
 #MainLoop
 def daemonLoop():
